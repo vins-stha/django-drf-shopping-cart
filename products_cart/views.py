@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from django.http import Http404
 from rest_framework import filters
 
@@ -20,7 +20,6 @@ from rest_framework import viewsets, mixins, status
 
 class CategoryList(APIView):
 
-
     def get(self, request, format=None):
         cats = Category.objects.all()
         serializer_class = CategorySerializer(cats, many = True)
@@ -30,17 +29,23 @@ class CategoryList(APIView):
 
     def post(self,request,format=None):
         serializer = CategorySerializer(data=request.data)
+        parser_classes = [MultiPartParser,FormParser]
+
+        print(request.data)
         permission_classes = [IsAuthenticated]
 
         if not request.user.is_authenticated:
             return Response({'error':'Unauthorized. Please login as admin'}, status=401)
 
-        if request.user.is_authenticated & serializer.is_valid():
+        if request.user.is_authenticated &  serializer.is_valid():
 
             serializer.save()
+            print('DATA=', serializer.data)
             return Response(serializer.data,status = status.HTTP_201_CREATED)
+        else:
+            print('ERRORS=', serializer.errors)
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 # class based api view for category to view individual category, delete and update categories
 
@@ -76,6 +81,7 @@ class CategoryDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+## Product Views
 class ProductViews(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -106,11 +112,15 @@ class ProductDetail(generics.RetrieveAPIView):
         serializer = ProductSerializer(cat)
         return Response(serializer.data)
 
-
-
 from django.contrib.auth.models import User
 class AdminViews(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminSerializer
+
+
+
+class CustomerViewSets(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
 
 
