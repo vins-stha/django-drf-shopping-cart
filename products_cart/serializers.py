@@ -14,6 +14,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
 from django.contrib.auth.models import User
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:

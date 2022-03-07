@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -122,5 +123,3 @@ class AdminViews(viewsets.ModelViewSet):
 class CustomerViewSets(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-
-
