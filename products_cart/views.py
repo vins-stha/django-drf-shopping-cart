@@ -14,6 +14,8 @@ from django.http import Http404
 from rest_framework import filters
 
 from rest_framework.permissions import IsAuthenticated
+
+
 from rest_framework import viewsets, mixins, status
 
 
@@ -46,7 +48,6 @@ class CategoryList(APIView):
         else:
             print('ERRORS=', serializer.errors)
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
 
 # class based api view for category to view individual category, delete and update categories
 
@@ -117,7 +118,7 @@ from django.contrib.auth.models import User
 class AdminViews(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminSerializer
-
+    # permission_classes = [IsAuthenticated]
 
 
 class CustomerViewSets(viewsets.ModelViewSet):

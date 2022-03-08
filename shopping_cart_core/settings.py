@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'products_cart',
-    'corsheaders'
+    'corsheaders',
+    'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
@@ -64,6 +66,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://localhost:3000'
 ]
+CSRF_TRUSTED_ORIGINS = ['https://localhost:3000']
+
 
 ROOT_URLCONF = 'shopping_cart_core.urls'
 REST_FRAMEWORK = {
@@ -74,7 +78,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.MultiPartParser',
-        'rest_framework.parsers.FormParser'
+        'rest_framework.parsers.FormParser',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
         # ...
     )
 }
